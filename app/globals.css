@@ -96,60 +96,28 @@
   }
 }
 
-@keyframes wave-shift {
+@keyframes bar-scale {
+  0%, 100% { transform: scaleY(0.15); opacity: 0.2; }
+  50%       { transform: scaleY(1);    opacity: 1;   }
+}
+
+@keyframes shimmer-x {
   0%   { transform: translateX(-100%); }
-  100% { transform: translateX(200%); }
+  100% { transform: translateX(400%); }
 }
 
-@keyframes wave-bar {
-  0%, 100% { transform: scaleY(0.3); opacity: 0.3; }
-  50%       { transform: scaleY(1);   opacity: 1;   }
+@keyframes fade-up {
+  0%   { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0);   }
 }
 
-@keyframes glow-pulse {
-  0%, 100% { opacity: 0.4; transform: scale(1);    }
-  50%       { opacity: 0.9; transform: scale(1.08); }
+@keyframes status-fade {
+  0%, 18%  { opacity: 1; transform: translateY(0); }
+  22%, 95% { opacity: 0; transform: translateY(-4px); }
+  100%     { opacity: 0; }
 }
 
-@keyframes scan-line {
-  0%   { transform: translateY(-100%); opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { transform: translateY(100vh);  opacity: 0; }
-}
-
-@keyframes orbit {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-@keyframes orbit-reverse {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(-360deg); }
-}
-
-@keyframes float-dot {
-  0%, 100% { transform: translateY(0px)   scale(1);   opacity: 0.6; }
-  50%       { transform: translateY(-12px) scale(1.3); opacity: 1;   }
-}
-
-@keyframes status-cycle {
-  0%, 20%   { opacity: 1; }
-  25%, 95%  { opacity: 0; }
-  100%      { opacity: 0; }
-}
-
-@keyframes waveform-travel {
-  0%   { stroke-dashoffset: 600; }
-  100% { stroke-dashoffset: 0; }
-}
-
-@keyframes corner-ping {
-  0%, 100% { opacity: 1;   transform: scale(1);   }
-  50%       { opacity: 0.3; transform: scale(0.6); }
-}
-
-@keyframes orbit-reverse {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(-360deg); }
+@keyframes dot-pulse {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50%       { opacity: 1;   transform: scale(1);   }
 }
