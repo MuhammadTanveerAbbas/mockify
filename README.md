@@ -4,7 +4,7 @@
 
   # Mockify
 
-  **Generate stunning AI mockups and images instantly  no API keys, no setup, no cost.**
+  **Generate stunning AI mockups and images instantly — powered by fal.ai and Together AI.**
 
   [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)](https://mockify.vercel.app)
   [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
@@ -18,39 +18,36 @@
 
 ## Overview
 
-Mockify is a free, browser-based AI image generator built for designers, developers, and marketers who need high-quality mockups and visuals without the friction of API keys or paid subscriptions. It runs entirely client-side via [Puter.js](https://developer.puter.com), giving you access to the world's best image models  DALL·E 3, Flux, Imagen, Gemini, and Ideogram  in a single clean interface. Unlike other tools that lock features behind paywalls, Mockify is fully open-source and costs nothing to use.
+Mockify is a free, open-source AI image generator built for designers, developers, and marketers. It uses a Next.js API route to call [fal.ai](https://fal.ai) and [Together AI](https://together.ai) — giving you access to Flux Schnell, Flux Pro, Imagen 4, and Ideogram 3.0 in a single clean interface. All generated images and settings are stored in localStorage — no auth, no database required.
 
 ---
 
 ## ✨ Features
 
-- 🚀 **Multiple AI Models**  Choose from DALL·E 3, Flux 1.1 Pro, Imagen 4 Ultra, Gemini 2.5 Flash, and Ideogram 3.0
-- 🎨 **Prompt Enhancement**  Automatically enriches prompts with composition and quality keywords for better results
-- 📐 **Aspect Ratio Selector**  Square (1:1), Landscape (16:9), Portrait (9:16), Large Square, and Widescreen
-- ⚙️ **Quality Control**  Per-model quality settings (Standard / HD / Low / Medium / High)
-- 🕓 **Session History**  Browse, search, re-load, and delete previously generated images within the session
-- 🔍 **Fullscreen Lightbox**  View generated images fullscreen with zoom in/out support
-- 💾 **Download**  Save any generated image locally as PNG
-- 📋 **Copy Prompt**  One-click copy of the prompt used for any image
-- ⚡ **Example Prompts**  Quick-start chips for common product and mockup use cases
-- 💾 **Persistent Settings**  Model, quality, and size preferences saved to localStorage
-- 🔓 **No API Key Required** Powered entirely by Puter.js, zero configuration needed
+- 🚀 **Multiple AI Models** — Flux Schnell, Flux Pro, Imagen 4, Ideogram 3.0, Together Flux (free fallback)
+- 🎨 **Prompt Enhancement** — Automatically enriches prompts with composition and quality keywords
+- 📐 **Aspect Ratio Selector** — Square (1:1), Landscape (16:9), Portrait (9:16)
+- ⚙️ **Quality Control** — Per-model quality settings (Standard / HD)
+- 🕓 **Session History** — Browse, search, re-load, and delete previously generated images
+- 🔍 **Fullscreen Lightbox** — View generated images fullscreen with zoom in/out support
+- 💾 **Download** — Save any generated image locally as PNG
+- 📋 **Copy Prompt** — One-click copy of the prompt used for any image
+- ⚡ **Example Prompts** — Quick-start chips for common product and mockup use cases
+- 💾 **Persistent Settings** — Model, quality, and size preferences saved to localStorage
 
 ---
 
 ## 🛠 Tech Stack
 
-| Category | Technlogy |
-|----------|----------|
-| Framework | Next.js 16(App Router) |
+| Category | Technology |
+|----------|------------|
+| Framework | Next.js 16 (App Router) |
 | Language | TypeScript 5.7 |
 | Styling | Tailwind CSS v4 |
 | UI Components | Radix UI + shadcn/ui |
-| AI Inference | Puter.js (`puter.ai.txt2img`) |
+| AI Inference | fal.ai + Together AI (server-side API route) |
 | Icons | Lucide React |
 | Package Manager | pnpm |
-
----
 
 ---
 
@@ -60,6 +57,8 @@ Mockify is a free, browser-based AI image generator built for designers, develop
 
 - Node.js 18+
 - pnpm (`npm install -g pnpm`)
+- [fal.ai](https://fal.ai/dashboard/keys) API key
+- [Together AI](https://api.together.xyz/settings/api-keys) API key (optional fallback)
 
 ### Installation
 
@@ -71,20 +70,28 @@ cd mockify
 # 2. Install dependencies
 pnpm install
 
-# 3. Start the development server
+# 3. Set up environment variables
+cp .env.example .env.local
+# Add your FAL_KEY and TOGETHER_API_KEY to .env.local
+
+# 4. Start the development server
 pnpm dev
 
-# 4. Open in browser
+# 5. Open in browser
 # http://localhost:3000
 ```
-
-> No `.env` file or API keys needed. Puter.js handles all AI calls client-side.
 
 ---
 
 ## 🔐 Environment Variables
 
-This project requires **no environment variables**. All AI inference runs through Puter.js in the browser  no backend, no secrets.
+```env
+# fal.ai — https://fal.ai/dashboard/keys
+FAL_KEY=your_fal_ai_key
+
+# Together AI — https://api.together.xyz/settings/api-keys
+TOGETHER_API_KEY=your_together_api_key
+```
 
 ---
 
@@ -92,28 +99,29 @@ This project requires **no environment variables**. All AI inference runs throug
 
 ```
 mockify/
-├── public/              # Static assets (favicon, screenshots, demo GIF)
+├── public/              # Static assets (favicon)
 ├── app/
 │   ├── api/
-│   │   └── generate-mockup/   # API route (reserved)
+│   │   └── generate/          # API route — calls fal.ai / Together AI
 │   ├── globals.css            # Global styles
-│   ├── layout.tsx             # Root layout, loads Puter.js script
-│   └── page.tsx               # Main page  state, history, error boundary
+│   ├── layout.tsx             # Root layout
+│   └── page.tsx               # Main page — state, history, error boundary
 ├── components/
 │   ├── ui/                    # shadcn/ui primitives
-│   ├── prompt-form.tsx        # Prompt input, model/quality/size selectors, example chips
+│   ├── prompt-form.tsx        # Prompt input, model/quality/size selectors
 │   ├── mockup-result.tsx      # Image display, download, copy, fullscreen lightbox
 │   ├── prompt-history.tsx     # Session history list with search and delete
-│   ├── history-sidebar.tsx    # Sidebar wrapper for history panel
 │   ├── wave-loader.tsx        # Loading animation
 │   └── empty-state.tsx        # Empty state UI
 ├── hooks/
-│   ├── use-mobile.ts          # Mobile detection hook
-│   └── use-toast.ts           # Toast notification hook
+│   ├── use-mobile.ts
+│   └── use-toast.ts
 ├── lib/
-│   ├── generateImage.ts       # Puter.js wrapper, prompt enhancer, model/size/quality config
+│   ├── fal.ts                 # fal.ai client wrapper
+│   ├── together.ts            # Together AI client wrapper
+│   ├── generateImage.ts       # Client-side fetch wrapper + model/size/quality config
 │   └── utils.ts               # Tailwind class utilities
-├── .gitignore
+├── .env.example
 ├── package.json
 ├── tsconfig.json
 └── README.md
@@ -134,21 +142,15 @@ mockify/
 
 ## 🌐 Deployment
 
-This project is deployed on **Vercel**.
-
-### Deploy Your Own
+Deploy on **Vercel** — add `FAL_KEY` and `TOGETHER_API_KEY` as environment variables in your project settings.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/MuhammadTanveerAbbas/mockify)
-
-1. Click the button above
-2. Connect your GitHub account
-3. Deploy  no environment variables needed
 
 ---
 
 ## 🗺 Roadmap
 
-- [x] Multiple AI model support
+- [x] Multiple AI model support (fal.ai + Together AI)
 - [x] Prompt enhancement engine
 - [x] Aspect ratio & quality controls
 - [x] Session history with search
@@ -160,7 +162,7 @@ This project is deployed on **Vercel**.
 
 ---
 
-## 🤝 Contibuting
+## 🤝 Contributing
 
 Contributions are welcome! Feel free to:
 
