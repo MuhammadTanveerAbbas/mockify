@@ -1,7 +1,16 @@
 "use client"
 
 import { useState } from "react"
-import { Loader2, Sparkles, Square, RectangleHorizontal, RectangleVertical, Maximize2, Monitor } from "lucide-react"
+import {
+  Loader2,
+  Sparkles,
+  Square,
+  RectangleHorizontal,
+  RectangleVertical,
+  Maximize2,
+  Monitor,
+  type LucideIcon,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ImageModel, MODEL_OPTIONS, QUALITY_SUPPORT, SIZE_OPTIONS, SIZE_SUPPORT, ImageSize } from "@/lib/generateImage"
 
@@ -53,7 +62,7 @@ export function PromptForm({
   }
 
   // Icon mapping
-  const iconMap: Record<string, any> = {
+  const iconMap: Record<string, LucideIcon> = {
     Square,
     RectangleHorizontal,
     RectangleVertical,
@@ -105,15 +114,12 @@ export function PromptForm({
           >
             {MODEL_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
-                {opt.label} • {opt.badge}
+                {opt.label}
               </option>
             ))}
           </select>
           {MODEL_OPTIONS.find((opt) => opt.value === model)?.description && (
-            <p className="text-xs text-muted-foreground/70 font-mono mt-0.5 flex items-center gap-1.5">
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-accent/10 text-accent text-[10px] font-medium">
-                {MODEL_OPTIONS.find((opt) => opt.value === model)?.badge}
-              </span>
+            <p className="text-xs text-muted-foreground/70 font-mono mt-0.5">
               {MODEL_OPTIONS.find((opt) => opt.value === model)?.description}
             </p>
           )}
@@ -158,7 +164,7 @@ export function PromptForm({
                   type="button"
                   onClick={() => onSizeChange(opt.value)}
                   className={cn(
-                    "flex flex-col items-center gap-1.5 rounded-lg border px-3 py-2.5 transition-all",
+                    "flex min-h-11 flex-col items-center justify-center gap-1.5 rounded-lg border px-3 py-2.5 transition-all",
                     size === opt.value
                       ? "border-ring bg-accent/10 text-foreground"
                       : "border-border bg-muted text-muted-foreground hover:border-ring/50 hover:text-foreground"
@@ -199,7 +205,7 @@ export function PromptForm({
         type="submit"
         disabled={isLoading}
         className={cn(
-          "w-full sm:w-auto flex items-center justify-center gap-2 rounded-lg px-6 py-3",
+          "w-full sm:w-auto min-h-11 flex items-center justify-center gap-2 rounded-lg px-6 py-3",
           "bg-primary text-primary-foreground font-sans text-sm font-medium",
           "hover:opacity-90 active:opacity-80 transition-opacity",
           "disabled:opacity-30 disabled:cursor-not-allowed"

@@ -7,6 +7,9 @@ declare global {
           options?: {
             model?: string
             quality?: "low" | "medium" | "high" | "hd" | "standard"
+            size?: string
+            width?: number
+            height?: number
           }
         ) => Promise<HTMLImageElement>
       }

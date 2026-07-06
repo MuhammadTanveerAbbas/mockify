@@ -92,7 +92,13 @@ export async function generateImage(
   const enhancedPrompt = enhancePrompt(prompt, size)
   
   // Build generation options
-  const generationOptions: any = {
+  const generationOptions: {
+    model: string
+    quality: GenerateImageOptions["quality"]
+    size?: ImageSize
+    width?: number
+    height?: number
+  } = {
     model: options.model ?? "dall-e-3",
     quality: options.quality ?? "medium",
   }
@@ -125,12 +131,12 @@ export async function generateImage(
   return URL.createObjectURL(blob)
 }
 
-export const MODEL_OPTIONS: { label: string; value: ImageModel; badge?: string; description?: string }[] = [
-  { label: "DALL·E 3", value: "dall-e-3", badge: "Best Quality", description: "Highest quality, detailed images" },
-  { label: "Flux 1.1 Pro", value: "black-forest-labs/FLUX.1.1-pro", badge: "Most Realistic", description: "Photorealistic results" },
-  { label: "Imagen 4 Ultra", value: "google/imagen-4.0-ultra", badge: "Ultra HD", description: "Google's premium model" },
-  { label: "Gemini 2.5 Flash", value: "gemini-2.5-flash-image-preview", badge: "Fastest", description: "Quick generation" },
-  { label: "Ideogram 3.0", value: "ideogram/ideogram-3.0", badge: "Text in Images", description: "Best for text rendering" },
+export const MODEL_OPTIONS: { label: string; value: ImageModel; description: string }[] = [
+  { label: "DALL·E 3", value: "dall-e-3", description: "OpenAI image model with standard and HD quality options" },
+  { label: "Flux 1.1 Pro", value: "black-forest-labs/FLUX.1.1-pro", description: "Black Forest Labs model with flexible size and quality settings" },
+  { label: "Imagen 4 Ultra", value: "google/imagen-4.0-ultra", description: "Google Imagen model with multiple aspect ratios" },
+  { label: "Gemini 2.5 Flash", value: "gemini-2.5-flash-image-preview", description: "Google Gemini image preview model" },
+  { label: "Ideogram 3.0", value: "ideogram/ideogram-3.0", description: "Ideogram model suited to layouts with text" },
 ]
 
 /** Models that support quality selection and their allowed values */

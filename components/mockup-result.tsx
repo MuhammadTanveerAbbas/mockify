@@ -86,23 +86,26 @@ export function MockupResult({ imageUrl, prompt }: MockupResultProps) {
         {/* Action row */}
         <div className="flex items-center justify-end gap-2 flex-wrap">
           <button
+            type="button"
             onClick={handleCopyPrompt}
-            className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:border-ring transition-colors font-mono"
+            className="flex min-h-11 items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs text-muted-foreground hover:text-foreground hover:border-ring transition-colors font-mono"
           >
             {copied ? <Check className="h-3.5 w-3.5 text-accent" /> : <Copy className="h-3.5 w-3.5" />}
             <span className="hidden sm:inline">{copied ? "Copied" : "Copy prompt"}</span>
             <span className="sm:hidden">{copied ? "Copied" : "Copy"}</span>
           </button>
           <button
+            type="button"
             onClick={() => setFullscreen(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:border-ring transition-colors font-mono"
+            className="flex min-h-11 items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs text-muted-foreground hover:text-foreground hover:border-ring transition-colors font-mono"
           >
             <Maximize2 className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">Fullscreen</span>
           </button>
           <button
+            type="button"
             onClick={handleDownload}
-            className="flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-3 py-1.5 text-xs font-medium hover:opacity-90 transition-opacity"
+            className="flex min-h-11 items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-3 py-2 text-xs font-medium hover:opacity-90 transition-opacity"
           >
             <Download className="h-3.5 w-3.5" />
             Download
@@ -128,22 +131,25 @@ export function MockupResult({ imageUrl, prompt }: MockupResultProps) {
           {/* Toolbar */}
           <div className="flex shrink-0 items-center justify-end border-b border-border px-5 py-3 gap-2">
             <button
+              type="button"
               onClick={() => setZoomed((z) => !z)}
-              className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:border-ring transition-colors font-mono"
+              className="flex min-h-11 items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs text-muted-foreground hover:text-foreground hover:border-ring transition-colors font-mono"
             >
               {zoomed ? <ZoomOut className="h-3.5 w-3.5" /> : <ZoomIn className="h-3.5 w-3.5" />}
               {zoomed ? "Zoom out" : "Zoom in"}
             </button>
             <button
+              type="button"
               onClick={handleDownload}
-              className="flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-3 py-1.5 text-xs font-medium hover:opacity-90 transition-opacity"
+              className="flex min-h-11 items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-3 py-2 text-xs font-medium hover:opacity-90 transition-opacity"
             >
               <Download className="h-3.5 w-3.5" />
               Download
             </button>
             <button
+              type="button"
               onClick={() => { setFullscreen(false); setZoomed(false) }}
-              className="flex items-center justify-center rounded-lg border border-border p-1.5 text-muted-foreground hover:text-foreground hover:border-ring transition-colors"
+              className="flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-border p-2 text-muted-foreground hover:text-foreground hover:border-ring transition-colors"
               title="Close (Esc)"
             >
               <X className="h-4 w-4" />

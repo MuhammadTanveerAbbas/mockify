@@ -75,14 +75,16 @@ function HistoryCard({
         <button
           onClick={handleCopy}
           title="Copy prompt"
-          className="rounded-lg p-1.5 text-muted-foreground opacity-0 transition-all group-hover:opacity-100 hover:bg-secondary hover:text-foreground"
+          type="button"
+          className="min-h-11 min-w-11 rounded-lg p-2 text-muted-foreground opacity-100 sm:opacity-0 transition-all sm:group-hover:opacity-100 hover:bg-secondary hover:text-foreground"
         >
           {copied ? <Check className="h-3 w-3 text-muted-foreground" /> : <Copy className="h-3 w-3" />}
         </button>
         <button
           onClick={handleDelete}
           title="Delete"
-          className="rounded-lg p-1.5 text-muted-foreground opacity-0 transition-all group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive"
+          type="button"
+          className="min-h-11 min-w-11 rounded-lg p-2 text-muted-foreground opacity-100 sm:opacity-0 transition-all sm:group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive"
         >
           <Trash2 className="h-3 w-3" />
         </button>
@@ -127,7 +129,7 @@ export function PromptHistory({ items, onSelect, onDelete, onClearAll }: PromptH
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search history…"
-            className="w-full rounded-lg border border-border bg-background/60 py-2 pl-8 pr-8 text-xs text-foreground placeholder:text-muted-foreground/35 focus:border-foreground/25 focus:outline-none focus:ring-2 focus:ring-foreground/10 transition-all"
+            className="w-full min-h-11 rounded-lg border border-border bg-background/60 py-2 pl-8 pr-8 text-xs text-foreground placeholder:text-muted-foreground/35 focus:border-foreground/25 focus:outline-none focus:ring-2 focus:ring-foreground/10 transition-all"
           />
           {search && (
             <button
@@ -139,15 +141,18 @@ export function PromptHistory({ items, onSelect, onDelete, onClearAll }: PromptH
           )}
         </div>
         <button
+          type="button"
           onClick={onClearAll}
-          className="shrink-0 rounded-lg border border-border/60 bg-secondary/40 px-3 py-2 text-xs font-medium text-muted-foreground transition-all hover:border-destructive/30 hover:bg-destructive/10 hover:text-destructive"
+          className="shrink-0 min-h-11 rounded-lg border border-border/60 bg-secondary/40 px-3 py-2 text-xs font-medium text-muted-foreground transition-all hover:border-destructive/30 hover:bg-destructive/10 hover:text-destructive"
         >
           Clear all
         </button>
       </div>
 
       {filtered.length === 0 ? (
-        <p className="py-10 text-center text-xs text-muted-foreground/50">No results for "{search}"</p>
+        <p className="py-10 text-center text-xs text-muted-foreground/50">
+          No results for &ldquo;{search}&rdquo;
+        </p>
       ) : (
         <div className="flex flex-col gap-2.5" role="list">
           {filtered.map((item) => (
