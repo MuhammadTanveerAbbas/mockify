@@ -178,7 +178,7 @@ export function PromptForm({
             })}
           </div>
           <p className="text-xs text-muted-foreground/70 font-mono">
-            Selected: {size} • Full frame, no cropping
+            Selected: {size}, full frame, no cropping
           </p>
         </div>
       )}
@@ -195,7 +195,7 @@ export function PromptForm({
               "hover:border-ring hover:text-foreground transition-colors font-mono"
             )}
           >
-            {ex.length > 36 ? ex.slice(0, 36) + "…" : ex}
+            {ex.length > 36 ? ex.slice(0, 36) + "..." : ex}
           </button>
         ))}
       </div>
@@ -214,7 +214,7 @@ export function PromptForm({
         {isLoading ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
-            Generating…
+            Generating...
           </>
         ) : (
           <>

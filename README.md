@@ -4,9 +4,9 @@
 
   # Mockify
 
-  **Generate AI mockups and images in your browser — powered by Puter.js.**
+  **Generate AI mockups and images in your browser, powered by Puter.js.**
 
-  [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)](https://mockify.vercel.app)
+  [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)](https://mockify-muhammadtanveerabbas.vercel.app)
   [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
   [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://typescriptlang.org)
   [![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org)
@@ -18,22 +18,22 @@
 
 ## Overview
 
-Mockify is a free, open-source AI image generator for designers, developers, and marketers. It runs entirely in the browser using [Puter.js](https://developer.puter.com) — no backend API keys, auth, or database required. Generated images and your model settings are saved in your browser's localStorage.
+Mockify is a free, open-source AI image generator for designers, developers, and marketers. It runs entirely in the browser using [Puter.js](https://developer.puter.com), no backend API keys, auth, or database required. Generated images and your model settings are saved in your browser's localStorage.
 
 ---
 
 ## Features
 
-- **Multiple AI models** — DALL·E 3, Flux 1.1 Pro, Imagen 4 Ultra, Gemini 2.5 Flash, Ideogram 3.0 (via Puter.js)
-- **Prompt enhancement** — Adds composition and quality guidance before generation
-- **Aspect ratio selector** — Square, landscape, portrait, and widescreen options (model-dependent)
-- **Quality control** — Per-model quality settings where supported
-- **Generation history** — Browse, search, reload, and delete images saved in localStorage
-- **Fullscreen lightbox** — View generated images with zoom
-- **Download** — Save any generated image locally
-- **Copy prompt** — One-click copy of the prompt used for any image
-- **Example prompts** — Quick-start chips for common product and mockup use cases
-- **Persistent settings** — Model, quality, and size preferences saved to localStorage
+- **Multiple AI models**, DALL-E 3, Flux 1.1 Pro, Imagen 4 Ultra, Gemini 2.5 Flash, Ideogram 3.0 (via Puter.js)
+- **Prompt enhancement**, Adds composition and quality guidance before generation
+- **Aspect ratio selector**, Square, landscape, portrait, and widescreen options (model-dependent)
+- **Quality control**, Per-model quality settings where supported
+- **Generation history**, Browse, search, reload, and delete images saved in localStorage
+- **Fullscreen lightbox**, View generated images with zoom
+- **Download**, Save any generated image locally
+- **Copy prompt**, One-click copy of the prompt used for any image
+- **Example prompts**, Quick-start chips for common product and mockup use cases
+- **Persistent settings**, Model, quality, and size preferences saved to localStorage
 
 ---
 
@@ -86,7 +86,7 @@ mockify/
 ├── app/
 │   ├── globals.css      # Global styles and design tokens
 │   ├── layout.tsx       # Root layout (loads Puter.js)
-│   └── page.tsx         # Main page — generation, history, settings
+│   └── page.tsx         # Main page, generation, history, settings
 ├── components/
 │   ├── prompt-form.tsx        # Prompt input, model/quality/size selectors
 │   ├── mockup-result.tsx      # Image display, download, copy, fullscreen
@@ -160,7 +160,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <div align="center">
 
 **Muhammad Tanveer Abbas**
-SaaS Developer | Building production-ready MVPs in 14–21 days
+SaaS Developer | Building production-ready MVPs in 14-21 days
 
 [![Portfolio](https://img.shields.io/badge/Portfolio-themvpguy.vercel.app-black?style=for-the-badge)](https://themvpguy.vercel.app)
 [![Twitter](https://img.shields.io/badge/Twitter-@m_tanveerabbas-1DA1F2?style=for-the-badge&logo=twitter)](https://x.com/m_tanveerabbas)

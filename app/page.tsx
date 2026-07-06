@@ -293,7 +293,7 @@ export default function Home() {
                 </h1>
                 <p className="text-sm text-muted-foreground font-mono max-w-md mx-auto leading-relaxed px-2">
                   Describe a mockup, product, or scene and generate an image in your browser.
-                  Powered by Puter.js — no API keys required.
+                  Powered by Puter.js, no API keys required.
                 </p>
               </div>
             )}
@@ -332,7 +332,7 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-border mt-16 py-6 px-4 text-center text-xs font-mono text-muted-foreground">
-        © {new Date().getFullYear()} Mockify ·{" "}
+        © {new Date().getFullYear()} Mockify,{" "}
         <a
           href="https://developer.puter.com"
           target="_blank"

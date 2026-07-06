@@ -132,7 +132,7 @@ export async function generateImage(
 }
 
 export const MODEL_OPTIONS: { label: string; value: ImageModel; description: string }[] = [
-  { label: "DALL·E 3", value: "dall-e-3", description: "OpenAI image model with standard and HD quality options" },
+  { label: "DALL-E 3", value: "dall-e-3", description: "OpenAI image model with standard and HD quality options" },
   { label: "Flux 1.1 Pro", value: "black-forest-labs/FLUX.1.1-pro", description: "Black Forest Labs model with flexible size and quality settings" },
   { label: "Imagen 4 Ultra", value: "google/imagen-4.0-ultra", description: "Google Imagen model with multiple aspect ratios" },
   { label: "Gemini 2.5 Flash", value: "gemini-2.5-flash-image-preview", description: "Google Gemini image preview model" },

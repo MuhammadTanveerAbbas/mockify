@@ -8,11 +8,11 @@ const G50 = "oklch(0.5 0.24 293 / 0.50)"
 const BAR_COUNT = 28
 
 const STATUS_MESSAGES = [
-  "Reading your prompt…",
-  "Thinking about composition…",
-  "Choosing the right style…",
-  "Painting pixels…",
-  "Almost there…",
+  "Reading your prompt...",
+  "Thinking about composition...",
+  "Choosing the right style...",
+  "Painting pixels...",
+  "Almost there...",
 ]
 
 const TOTAL_DURATION = STATUS_MESSAGES.length * 2 // seconds
@@ -23,7 +23,7 @@ export function WaveLoader() {
       className="flex flex-col gap-5"
       style={{ animation: "fade-up 0.4s ease both" }}
     >
-      {/* Top row — model label + cycling status */}
+      {/* Top row, model label and cycling status */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {/* Three-dot pulse indicator */}
@@ -46,7 +46,7 @@ export function WaveLoader() {
             className="text-xs font-mono tracking-wide"
             style={{ color: G50 }}
           >
-            mockify · generating
+            mockify, generating
           </span>
         </div>
 
