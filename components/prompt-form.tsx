@@ -12,7 +12,7 @@ import {
   type LucideIcon,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { ImageModel, MODEL_OPTIONS, QUALITY_SUPPORT, SIZE_OPTIONS, SIZE_SUPPORT, ImageSize } from "@/lib/generateImage"
+import { ImageModel, MODEL_OPTIONS, QUALITY_SUPPORT, SIZE_OPTIONS, SIZE_SUPPORT, Quality, SizeValue } from "@/lib/generateImage"
 
 const MAX_CHARS = 1000
 
@@ -25,14 +25,14 @@ const EXAMPLE_PROMPTS = [
 ]
 
 interface PromptFormProps {
-  onGenerate: (prompt: string, size: ImageSize) => void
+  onGenerate: (prompt: string, size: SizeValue) => void
   isLoading: boolean
   model: ImageModel
-  quality: string
-  size: ImageSize
+  quality: Quality
+  size: SizeValue
   onModelChange: (model: ImageModel) => void
-  onQualityChange: (quality: string) => void
-  onSizeChange: (size: ImageSize) => void
+  onQualityChange: (quality: Quality) => void
+  onSizeChange: (size: SizeValue) => void
 }
 
 export function PromptForm({
@@ -49,7 +49,8 @@ export function PromptForm({
   const [promptError, setPromptError] = useState<string | null>(null)
 
   const qualityOptions = QUALITY_SUPPORT[model] ?? null
-  const sizeOptions = SIZE_SUPPORT[model] ?? null
+  // Models without explicit size restrictions support every size
+  const sizeOptions = SIZE_SUPPORT[model] ?? SIZE_OPTIONS.map((s) => s.value)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -84,8 +85,8 @@ export function PromptForm({
           rows={4}
           className={cn(
             "w-full resize-none rounded-lg border bg-muted px-4 py-3 pb-6",
-            "h-28 font-sans text-sm text-foreground placeholder:text-muted-foreground",
-            "focus:outline-none focus:ring-1 focus:ring-ring transition-colors leading-relaxed",
+            "h-32 font-sans text-sm text-foreground placeholder:text-muted-foreground",
+            "focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent/50 transition-colors leading-relaxed",
             promptError ? "border-destructive" : "border-border"
           )}
         />
@@ -106,13 +107,13 @@ export function PromptForm({
           <select
             value={model}
             onChange={(e) => onModelChange(e.target.value as ImageModel)}
-            className={cn(
-              "rounded-lg border border-border bg-muted px-3 py-2",
-              "text-sm text-foreground font-sans",
-              "focus:outline-none focus:ring-1 focus:ring-ring transition-colors"
-            )}
-          >
-            {MODEL_OPTIONS.map((opt) => (
+              className={cn(
+                "rounded-lg border border-border bg-muted px-3 py-2",
+                "text-sm text-foreground font-sans",
+                "focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent/50 transition-colors"
+              )}
+            >
+              {MODEL_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}
               </option>
@@ -132,11 +133,11 @@ export function PromptForm({
             </label>
             <select
               value={quality}
-              onChange={(e) => onQualityChange(e.target.value)}
+              onChange={(e) => onQualityChange(e.target.value as Quality)}
               className={cn(
                 "rounded-lg border border-border bg-muted px-3 py-2",
                 "text-sm text-foreground font-sans",
-                "focus:outline-none focus:ring-1 focus:ring-ring transition-colors"
+                "focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent/50 transition-colors"
               )}
             >
               {qualityOptions.map((q) => (
@@ -155,7 +156,7 @@ export function PromptForm({
           <label className="text-xs font-mono text-muted-foreground uppercase tracking-widest">
             Size & Aspect Ratio
           </label>
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {SIZE_OPTIONS.filter(opt => sizeOptions.includes(opt.value)).map((opt) => {
               const IconComponent = iconMap[opt.icon]
               return (
@@ -205,10 +206,11 @@ export function PromptForm({
         type="submit"
         disabled={isLoading}
         className={cn(
-          "w-full sm:w-auto min-h-11 flex items-center justify-center gap-2 rounded-lg px-6 py-3",
-          "bg-primary text-primary-foreground font-sans text-sm font-medium",
-          "hover:opacity-90 active:opacity-80 transition-opacity",
-          "disabled:opacity-30 disabled:cursor-not-allowed"
+          "w-full min-h-12 flex items-center justify-center gap-2 rounded-lg px-8 py-3.5",
+          "bg-accent text-accent-foreground font-sans text-sm font-semibold tracking-wide",
+          "shadow-lg shadow-accent/25 transition-all",
+          "hover:shadow-accent/40 hover:brightness-110 active:brightness-95 active:scale-[0.99]",
+          "disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none"
         )}
       >
         {isLoading ? (
@@ -219,7 +221,7 @@ export function PromptForm({
         ) : (
           <>
             <Sparkles className="h-4 w-4" />
-            Generate
+            Generate Image
           </>
         )}
       </button>

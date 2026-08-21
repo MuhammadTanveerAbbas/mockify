@@ -24,7 +24,7 @@ function ImageFrame({
   onToggleZoom?: () => void
 }) {
   return (
-    <div className="relative overflow-hidden rounded-xl border border-border bg-card w-full">
+    <div className="relative overflow-hidden rounded-xl border border-border bg-card w-full shadow-lg shadow-black/30">
       <img
         src={imageUrl}
         alt={`Generated mockup: ${prompt}`}

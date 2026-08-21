@@ -84,6 +84,16 @@
   body {
     @apply bg-background text-foreground;
   }
+  ::selection {
+    background: oklch(0.5 0.24 293 / 0.35);
+    color: var(--foreground);
+  }
+  button:focus-visible,
+  a:focus-visible,
+  [role='button']:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px oklch(0.5 0.24 293 / 0.6);
+  }
 }
 
 @layer utilities {

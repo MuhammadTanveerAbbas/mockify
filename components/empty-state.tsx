@@ -3,8 +3,8 @@ import { Layers } from "lucide-react"
 export function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center gap-4 py-24 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-secondary">
-        <Layers className="h-7 w-7 text-muted-foreground" />
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-accent/20 bg-accent/10">
+        <Layers className="h-7 w-7 text-accent" />
       </div>
       <div className="flex flex-col gap-1">
         <p className="text-sm font-medium text-foreground">No mockup yet</p>

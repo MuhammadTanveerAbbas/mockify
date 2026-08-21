@@ -4,7 +4,7 @@
 
   # Mockify
 
-  **Generate AI mockups and images in your browser, powered by Puter.js.**
+  **Generate AI mockups and images in your browser, powered by Pollinations.ai.**
 
   [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)](https://mockify-muhammadtanveerabbas.vercel.app)
   [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
@@ -18,13 +18,14 @@
 
 ## Overview
 
-Mockify is a free, open-source AI image generator for designers, developers, and marketers. It runs entirely in the browser using [Puter.js](https://developer.puter.com), no backend API keys, auth, or database required. Generated images and your model settings are saved in your browser's localStorage.
+Mockify is a free, open-source AI image generator for designers, developers, and marketers. It runs entirely in the browser using [Pollinations.ai](https://pollinations.ai), a free and open image API. No backend, no API keys, no auth, no database required. Generated images and your model settings are saved in your browser's localStorage.
 
 ---
 
 ## Features
 
-- **Multiple AI models**, DALL-E 3, Flux 1.1 Pro, Imagen 4 Ultra, Gemini 2.5 Flash, Ideogram 3.0 (via Puter.js)
+- **Auto model mode**, Uses the best default model automatically, with automatic fallback if a request fails
+- **AI models**, Flux (photorealistic) and Turbo (fast), selectable per generation
 - **Prompt enhancement**, Adds composition and quality guidance before generation
 - **Aspect ratio selector**, Square, landscape, portrait, and widescreen options (model-dependent)
 - **Quality control**, Per-model quality settings where supported
@@ -33,7 +34,7 @@ Mockify is a free, open-source AI image generator for designers, developers, and
 - **Download**, Save any generated image locally
 - **Copy prompt**, One-click copy of the prompt used for any image
 - **Example prompts**, Quick-start chips for common product and mockup use cases
-- **Persistent settings**, Model, quality, and size preferences saved to localStorage
+- **Persistent settings**, Model, quality, and size preferences saved to localStorage (legacy settings migrate automatically)
 
 ---
 
@@ -44,7 +45,7 @@ Mockify is a free, open-source AI image generator for designers, developers, and
 | Framework | Next.js 16 (App Router) |
 | Language | TypeScript 5.7 |
 | Styling | Tailwind CSS v4 |
-| AI Inference | Puter.js (client-side) |
+| AI Inference | Pollinations.ai (free, client-side) |
 | Icons | Lucide React |
 | Package Manager | pnpm or npm |
 
@@ -74,7 +75,7 @@ pnpm dev
 # http://localhost:3000
 ```
 
-No environment variables are required. Puter.js handles AI inference in the browser.
+No environment variables are required. Pollinations.ai handles AI inference with no API key.
 
 ---
 
@@ -85,7 +86,7 @@ mockify/
 ├── public/              # Static assets (favicon)
 ├── app/
 │   ├── globals.css      # Global styles and design tokens
-│   ├── layout.tsx       # Root layout (loads Puter.js)
+│   ├── layout.tsx       # Root layout
 │   └── page.tsx         # Main page, generation, history, settings
 ├── components/
 │   ├── prompt-form.tsx        # Prompt input, model/quality/size selectors
@@ -94,7 +95,7 @@ mockify/
 │   ├── wave-loader.tsx        # Loading animation
 │   └── empty-state.tsx        # Empty state UI
 ├── lib/
-│   ├── generateImage.ts       # Puter.js wrapper + model/size/quality config
+│   ├── generateImage.ts       # Pollinations.ai wrapper + model/size config
 │   └── utils.ts               # Tailwind class utilities
 ├── package.json
 ├── tsconfig.json
@@ -125,7 +126,7 @@ Deploy on **Vercel** or any static Next.js host. No environment variables are ne
 
 ## Roadmap
 
-- [x] Multiple AI model support via Puter.js
+- [x] Multiple AI model support via Pollinations.ai
 - [x] Prompt enhancement
 - [x] Aspect ratio and quality controls
 - [x] Generation history with search (localStorage)

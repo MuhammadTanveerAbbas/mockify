@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, Component, type ReactNode } from "react"
+import { useState, useCallback, useRef, Component, type ReactNode } from "react"
 import { PromptForm } from "@/components/prompt-form"
 import { MockupResult } from "@/components/mockup-result"
 import { EmptyState } from "@/components/empty-state"
@@ -10,9 +10,13 @@ import { useLocalStorageItem } from "@/lib/use-local-storage"
 import { Clock, X } from "lucide-react"
 import {
   generateImage,
+  normalizeModel,
+  normalizeSize,
   ImageModel,
-  ImageSize,
+  Quality,
+  SizeValue,
   QUALITY_SUPPORT,
+  SIZE_SUPPORT,
   type GenerateImageOptions,
 } from "@/lib/generateImage"
 
@@ -35,14 +39,14 @@ interface StoredHistoryItem {
 
 interface AppSettings {
   model: ImageModel
-  quality: string
-  size: ImageSize
+  quality: Quality
+  size: SizeValue
 }
 
 const DEFAULT_SETTINGS: AppSettings = {
-  model: "dall-e-3",
-  quality: "standard",
-  size: "1024x1024",
+  model: "auto",
+  quality: "medium",
+  size: "square",
 }
 
 async function persistableImageUrl(url: string): Promise<string> {
@@ -71,7 +75,7 @@ function parseHistory(raw: string): HistoryItem[] {
     .map((item) => ({
       id: item.id,
       prompt: item.prompt,
-      model: item.model ?? "dall-e-3",
+      model: item.model ?? "auto",
       imageUrl: item.imageUrl,
       timestamp: new Date(item.timestamp),
     }))
@@ -91,11 +95,17 @@ function serializeHistory(items: HistoryItem[]): string {
 
 function parseSettings(raw: string): AppSettings {
   const parsed = JSON.parse(raw) as Partial<AppSettings>
-  return {
-    model: parsed.model ?? DEFAULT_SETTINGS.model,
-    quality: parsed.quality ?? DEFAULT_SETTINGS.quality,
-    size: parsed.size ?? DEFAULT_SETTINGS.size,
-  }
+  // normalizeModel/normalizeSize migrate legacy IDs and reject unknown values
+  const model = normalizeModel(parsed.model)
+  const size = normalizeSize(parsed.size)
+  const allowedSizes = SIZE_SUPPORT[model]
+  const safeSize = allowedSizes && !allowedSizes.includes(size) ? "square" : size
+  const supportedQualities = QUALITY_SUPPORT[model]
+  const quality =
+    supportedQualities && !supportedQualities.includes(parsed.quality as Quality)
+      ? DEFAULT_SETTINGS.quality
+      : (parsed.quality ?? DEFAULT_SETTINGS.quality)
+  return { model, quality, size: safeSize }
 }
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
@@ -139,6 +149,9 @@ export default function Home() {
   )
   const { model, quality, size } = settings
 
+  const lastAttempt = useRef<{ prompt: string; size: SizeValue } | null>(null)
+  const [canRetry, setCanRetry] = useState(false)
+
   const [history, setHistory] = useLocalStorageItem<HistoryItem[]>(
     HISTORY_KEY,
     [],
@@ -147,19 +160,30 @@ export default function Home() {
   )
 
   const setModel = useCallback(
-    (next: ImageModel) => setSettings((prev) => ({ ...prev, model: next })),
+    (next: ImageModel) =>
+      setSettings((prev) => {
+        // Keep quality/size valid for the newly selected model
+        const supportedQualities = QUALITY_SUPPORT[next]
+        const quality =
+          supportedQualities && !supportedQualities.includes(prev.quality)
+            ? DEFAULT_SETTINGS.quality
+            : prev.quality
+        const allowedSizes = SIZE_SUPPORT[next]
+        const size = allowedSizes && !allowedSizes.includes(prev.size) ? "square" : prev.size
+        return { ...prev, model: next, quality, size }
+      }),
     [setSettings]
   )
   const setQuality = useCallback(
-    (next: string) => setSettings((prev) => ({ ...prev, quality: next })),
+    (next: Quality) => setSettings((prev) => ({ ...prev, quality: next })),
     [setSettings]
   )
   const setSize = useCallback(
-    (next: ImageSize) => setSettings((prev) => ({ ...prev, size: next })),
+    (next: SizeValue) => setSettings((prev) => ({ ...prev, size: next })),
     [setSettings]
   )
 
-  const handleGenerate = async (prompt: string, selectedSize: ImageSize) => {
+  const handleGenerate = async (prompt: string, selectedSize: SizeValue) => {
     if (!prompt.trim()) {
       setError("Please enter a prompt.")
       return
@@ -167,12 +191,14 @@ export default function Home() {
 
     setIsLoading(true)
     setError(null)
+    lastAttempt.current = { prompt, size: selectedSize }
+    setCanRetry(true)
 
     try {
-      const qualitySupported = QUALITY_SUPPORT[model]
       const opts: GenerateImageOptions = { model, size: selectedSize }
-      if (qualitySupported) {
-        opts.quality = quality as GenerateImageOptions["quality"]
+      // generateImage only sends quality when the model supports it
+      if (QUALITY_SUPPORT[model]) {
+        opts.quality = quality
       }
 
       const imageUrl = await generateImage(prompt, opts)
@@ -205,7 +231,7 @@ export default function Home() {
 
   const handleSelectHistory = (item: HistoryItem) => {
     setCurrent({ imageUrl: item.imageUrl, prompt: item.prompt })
-    setModel(item.model as ImageModel)
+    setModel(normalizeModel(item.model))
     setShowHistory(false)
   }
 
@@ -259,7 +285,7 @@ export default function Home() {
 
       <main className="mx-auto max-w-3xl px-4 sm:px-6 py-6 sm:py-8 w-full">
         {showHistory ? (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
             <div className="flex items-center justify-between gap-3">
               <div className="min-w-0">
                 <h2 className="text-sm font-semibold text-foreground">Generation History</h2>
@@ -283,17 +309,22 @@ export default function Home() {
             />
           </div>
         ) : (
-          <div className="flex flex-col gap-6 sm:gap-8">
+          <div className="flex flex-col gap-6 sm:gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
             {!current && !isLoading && (
-              <div className="text-center pt-4 sm:pt-8 pb-2 sm:pb-4">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-balance text-foreground tracking-tight mb-2">
+              <div className="relative text-center pt-6 sm:pt-10 pb-2 sm:pb-4">
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute left-1/2 top-0 h-40 w-72 sm:w-96 -translate-x-1/2 rounded-full blur-3xl"
+                  style={{ background: "oklch(0.5 0.24 293 / 0.12)" }}
+                />
+                <h1 className="relative text-2xl sm:text-3xl lg:text-4xl font-semibold text-balance text-foreground tracking-tight mb-2">
                   Generate AI Images
                   <br />
                   <span className="text-accent font-normal">with Mockify</span>
                 </h1>
-                <p className="text-sm text-muted-foreground font-mono max-w-md mx-auto leading-relaxed px-2">
+                <p className="relative text-sm text-muted-foreground font-mono max-w-md mx-auto leading-relaxed px-2">
                   Describe a mockup, product, or scene and generate an image in your browser.
-                  Powered by Puter.js, no API keys required.
+                  Powered by Pollinations.ai, free and open. No API keys, no sign-up.
                 </p>
               </div>
             )}
@@ -314,9 +345,22 @@ export default function Home() {
             </div>
 
             {error && (
-              <div className="rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive-foreground font-mono wrap-break-word">
-                <span className="mr-2 text-destructive">Error:</span>
-                {error}
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-3">
+                <p className="min-w-0 flex-1 text-sm text-destructive-foreground font-mono wrap-break-word">
+                  <span className="mr-2 text-destructive">Couldn&apos;t generate:</span>
+                  {error}
+                </p>
+                {canRetry && !isLoading && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (lastAttempt.current) handleGenerate(lastAttempt.current.prompt, lastAttempt.current.size)
+                    }}
+                    className="shrink-0 min-h-9 rounded-lg border border-destructive/40 px-3 py-1.5 text-xs font-mono text-foreground hover:bg-destructive/20 transition-colors"
+                  >
+                    Try again
+                  </button>
+                )}
               </div>
             )}
 
@@ -334,12 +378,12 @@ export default function Home() {
       <footer className="border-t border-border mt-16 py-6 px-4 text-center text-xs font-mono text-muted-foreground">
         © {new Date().getFullYear()} Mockify,{" "}
         <a
-          href="https://developer.puter.com"
+          href="https://pollinations.ai"
           target="_blank"
           rel="noopener noreferrer"
           className="underline underline-offset-2 hover:text-foreground transition-colors"
         >
-          Built with Puter.js
+          Powered by Pollinations.ai
         </a>
       </footer>
     </div>
